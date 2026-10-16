@@ -1,92 +1,64 @@
-const questionScreen = document.getElementById('question-screen');
-const resultScreen = document.getElementById('result-screen');
-const yesBtn = document.getElementById('yes-btn');
-const noBtn = document.getElementById('no-btn');
-const buttonArea = document.getElementById('button-area');
-const hint = document.getElementById('hint');
-const video = document.getElementById('love-video');
-const videoPlaceholder = document.getElementById('video-placeholder');
-const againBtn = document.getElementById('again-btn');
 
-const playfulMessages = [
-  'Oops, you missed! Try again 😜',
-  'That button is a little shy 🙈',
-  'Are you sure? Think one more time 💗',
-  'Hehe… the answer might be YES! 🥹',
-  'You can run, but love will find you 💞'
-];
-let noAttempts = 0;
+const questionScreen = document.getElementById("question-screen");
+const resultScreen = document.getElementById("result-screen");
+const yesBtn = document.getElementById("yes-btn");
+const noBtn = document.getElementById("no-btn");
+const againBtn = document.getElementById("again-btn");
+const video = document.getElementById("love-video");
+const placeholder = document.getElementById("video-placeholder");
+const hint = document.getElementById("hint");
 
-function moveNoButton() {
-  const area = buttonArea.getBoundingClientRect();
-  const btn = noBtn.getBoundingClientRect();
-  // Keep the button within the visible viewport and near the question.
-  const maxX = Math.max(0, Math.min(window.innerWidth - btn.width - 24, area.left + area.width - btn.width));
-  const minX = Math.max(12, Math.min(area.left, maxX));
-  const maxY = Math.max(12, Math.min(window.innerHeight - btn.height - 12, area.bottom + 90));
-  const minY = Math.max(12, Math.min(area.top - 15, maxY));
-  noBtn.style.position = 'fixed';
-  noBtn.style.left = `${minX + Math.random() * Math.max(0, maxX - minX)}px`;
-  noBtn.style.top = `${minY + Math.random() * Math.max(0, maxY - minY)}px`;
-  hint.textContent = playfulMessages[noAttempts % playfulMessages.length];
-  noAttempts++;
-}
+yesBtn.addEventListener("click", function () {
+  questionScreen.classList.remove("active");
+  resultScreen.classList.add("active");
 
-noBtn.addEventListener('pointerenter', moveNoButton);
-noBtn.addEventListener('click', (event) => {
-  event.preventDefault();
-  moveNoButton();
-});
-noBtn.addEventListener('touchstart', (event) => {
-  event.preventDefault();
-  moveNoButton();
-}, { passive: false });
-
-yesBtn.addEventListener('click', () => {
-  questionScreen.classList.remove('active');
-  resultScreen.classList.add('active');
-  noBtn.style.position = '';
-  launchConfettiHearts();
-  // Show the placeholder only when the optional video file is missing.
-  video.addEventListener('error', () => {
-    video.style.display = 'none';
-    videoPlaceholder.style.display = 'flex';
-  }, { once: true });
-  video.addEventListener('loadeddata', () => {
-    videoPlaceholder.style.display = 'none';
-    video.style.display = 'block';
-    video.play().catch(() => {});
-  }, { once: true });
+  video.style.display = "block";
+  placeholder.style.display = "flex";
   video.load();
 });
 
-againBtn.addEventListener('click', () => {
-  resultScreen.classList.remove('active');
-  questionScreen.classList.add('active');
-  hint.textContent = 'Choose wisely 😉';
-  noBtn.style.position = '';
-  noBtn.style.left = '';
-  noBtn.style.top = '';
-  video.pause();
-  video.currentTime = 0;
+video.addEventListener("error", function () {
+  video.style.display = "none";
+  placeholder.style.display = "flex";
 });
 
-function makeFloatingHeart() {
-  const holder = document.querySelector('.floating-hearts');
-  const heart = document.createElement('span');
-  heart.className = 'float-heart';
-  heart.textContent = ['♥', '♡', '💗', '💕'][Math.floor(Math.random() * 4)];
-  heart.style.left = `${Math.random() * 100}%`;
-  heart.style.fontSize = `${14 + Math.random() * 22}px`;
-  const duration = 5 + Math.random() * 6;
-  heart.style.animationDuration = `${duration}s`;
-  holder.appendChild(heart);
-  setTimeout(() => heart.remove(), duration * 1000);
-}
-setInterval(makeFloatingHeart, 650);
+video.addEventListener("loadeddata", function () {
+  placeholder.style.display = "none";
+  video.style.display = "block";
+  video.play().catch(() => {});
+});
 
-function launchConfettiHearts() {
-  for (let i = 0; i < 24; i++) {
-    setTimeout(makeFloatingHeart, i * 65);
-  }
+noBtn.addEventListener("click", function () {
+  hint.textContent = "Hehe! Are you sure? Try YES! 💗";
+  noBtn.style.position = "relative";
+  noBtn.style.transform =
+    `translate(${Math.random() * 100 - 50}px, ${Math.random() * 50 - 25}px)`;
+});
+
+againBtn.addEventListener("click", function () {
+  resultScreen.classList.remove("active");
+  questionScreen.classList.add("active");
+  video.pause();
+  video.currentTime = 0;
+  noBtn.style.transform = "";
+  noBtn.style.position = "";
+  hint.textContent = "Choose wisely 😉";
+});
+
+function createHeart() {
+  const holder = document.querySelector(".floating-hearts");
+  if (!holder) return;
+
+  const heart = document.createElement("span");
+  heart.className = "float-heart";
+  heart.textContent = "♥";
+  heart.style.left = Math.random() * 100 + "%";
+  heart.style.fontSize = 14 + Math.random() * 22 + "px";
+  heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+  holder.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 11000);
 }
+
+setInterval(createHeart, 700);
+
