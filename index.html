@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07112b">
+<title>Airplane Heart Smoke Animation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}
+body{font-family:Arial,sans-serif;color:#fff7fd;background:radial-gradient(ellipse at 50% 110%,#254e8a,#142c60 40%,#07112b 78%)}
+.scene{position:relative;height:100svh;min-height:480px;overflow:hidden;isolation:isolate}
+.stars{position:absolute;inset:0;background-image:radial-gradient(2px 2px at 12% 20%,white 50%,transparent 60%),radial-gradient(1px 1px at 32% 68%,white 50%,transparent 60%),radial-gradient(2px 2px at 66% 17%,white 50%,transparent 60%),radial-gradient(1px 1px at 82% 38%,white 50%,transparent 60%),radial-gradient(2px 2px at 91% 75%,white 50%,transparent 60%),radial-gradient(1px 1px at 47% 33%,white 50%,transparent 60%);opacity:.8}
+.moon{position:absolute;top:12%;right:13%;width:clamp(65px,12vw,120px);aspect-ratio:1;border-radius:50%;background:#fff1d5;box-shadow:0 0 45px #fff1d566}
+.moon:after{content:"";position:absolute;inset:-5px -15px 5px 15px;border-radius:50%;background:#0b1838}
+header{position:absolute;z-index:4;top:8%;left:5%;right:5%;text-align:center}
+h1{font-size:clamp(1.3rem,4vw,2.7rem);letter-spacing:.12em;text-transform:uppercase;text-shadow:0 3px 25px #ff8fc744}
+header p{margin-top:12px;color:#d4defe;font-size:clamp(.8rem,2vw,1rem);letter-spacing:.06em}
+.path{position:absolute;width:150%;height:52%;left:-24%;top:30%;border-top:2px dashed #f8c9e755;border-radius:50%;transform:rotate(-13deg)}
+.heart-cloud{position:absolute;left:50%;top:43%;width:min(70vw,430px);transform:translate(-50%,-15%);opacity:.75}
+.heart-cloud svg{width:100%;overflow:visible}
+.outline{fill:none;stroke:#ff9fd1;stroke-width:2.5;stroke-dasharray:12 8;filter:drop-shadow(0 0 8px #ff6db7aa);animation:dash 18s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-400}}
+.trail{position:absolute;left:-10%;top:60%;width:120%;height:2px;transform:rotate(-13deg)}
+.heart{position:absolute;left:var(--x);top:var(--y);font-size:var(--s);color:#ff9fd1;opacity:0;filter:drop-shadow(0 0 8px #ff65b9aa);animation:rise var(--d) linear var(--delay) infinite}
+@keyframes rise{0%{opacity:0;transform:translate(0,20px) scale(.6)}15%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),-180px) scale(1.2) rotate(18deg)}}
+.plane-wrap{position:absolute;z-index:3;top:48%;left:-22%;width:clamp(110px,18vw,190px);animation:fly 10s ease-in-out infinite}
+@keyframes fly{0%{left:-22%;top:60%;transform:rotate(-8deg)}100%{left:112%;top:31%;transform:rotate(-8deg)}}
+.plane{display:block;width:100%;filter:drop-shadow(0 0 15px #a8d9ff77)}
+.smoke{position:absolute;width:12px;height:12px;left:18%;top:62%;border-radius:50%;background:#ffe2f4;box-shadow:0 0 18px 7px #ffb9e566;animation:smoke 2.8s ease-out infinite}
+.smoke:nth-child(2){animation-delay:.4s}.smoke:nth-child(3){animation-delay:.8s}.smoke:nth-child(4){animation-delay:1.2s}
+@keyframes smoke{0%{opacity:.7;transform:translate(-5px,0) scale(.35)}100%{opacity:0;transform:translate(-90px,35px) scale(3.3)}}
+button{position:absolute;z-index:5;bottom:13%;left:50%;transform:translateX(-50%);padding:12px 22px;border:1px solid #ffc5e4aa;border-radius:999px;background:#ffffff12;color:#fff7fd;font-size:.95rem;cursor:pointer;backdrop-filter:blur(8px)}
+button:hover{background:#ff8fc733}.note{position:absolute;z-index:4;bottom:6%;left:5%;right:5%;text-align:center;color:#d4defe;font-size:.8rem;letter-spacing:.1em}.note span{color:#ff9fd1}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style></head>
+<body><main class="scene"><div class="stars"></div><div class="moon"></div>
+<header><h1>Love is in the air</h1><p>A little heart, written across the night sky</p></header>
+<div class="path"></div>
+<div class="heart-cloud" aria-hidden="true"><svg viewBox="0 0 400 360"><path class="outline" d="M200 318 C170 290 42 207 42 118 C42 40 139 22 200 105 C261 22 358 40 358 118 C358 207 230 290 200 318 Z"/><path class="outline" style="animation-direction:reverse;opacity:.55;stroke-width:1.5" d="M200 285 C174 261 73 195 73 123 C73 65 143 51 200 126 C257 51 327 65 327 123 C327 195 226 261 200 285 Z"/></svg></div>
+<div class="trail" id="trail" aria-hidden="true"></div>
+<div class="plane-wrap" id="plane"><i class="smoke"></i><i class="smoke"></i><i class="smoke"></i><i class="smoke"></i>
+<svg class="plane" viewBox="0 0 220 100" role="img" aria-label="White airplane"><defs><linearGradient id="metal" x1="0" x2="1"><stop stop-color="#b9dfff"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#8ec5ff"/></linearGradient></defs><path fill="url(#metal)" d="M7 48 L83 42 L132 8 Q139 3 145 8 L128 43 L188 38 Q204 38 211 47 Q216 54 201 57 L127 63 L105 89 Q101 94 95 91 L103 64 L28 69 Q13 68 7 58 L2 52 Z"/></svg></div>
+<button id="replay">Replay flight ✈</button><p class="note">MADE WITH <span>♥</span> AND A LITTLE MAGIC</p></main>
+<script>
+const plane=document.getElementById('plane');
+document.getElementById('replay').addEventListener('click',()=>{plane.style.animation='none';void plane.offsetWidth;plane.style.animation='fly 10s ease-in-out infinite'});
+const trail=document.getElementById('trail');
+function addHeart(){const h=document.createElement('span');h.className='heart';h.textContent=Math.random()>.5?'♥':'♡';h.style.setProperty('--x',Math.random()*95+'%');h.style.setProperty('--y',(Math.random()*24-10)+'px');h.style.setProperty('--s',(12+Math.random()*15)+'px');h.style.setProperty('--d',(3.5+Math.random()*3)+'s');h.style.setProperty('--delay','0s');h.style.setProperty('--dx',(Math.random()*60-30)+'px');trail.appendChild(h);setTimeout(()=>h.remove(),7000)}
+for(let i=0;i<8;i++)setTimeout(addHeart,i*250);setInterval(addHeart,700);
+</script></body></html>
